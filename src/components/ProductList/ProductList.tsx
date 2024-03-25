@@ -1,60 +1,9 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
-*/
-import { StarIcon } from "@heroicons/react/20/solid";
-type Product = {
-  description: string;
-  featuredImage: {
-    altText: string;
-    height: number;
-    width: number;
-    url: string;
-  };
-  handle: string;
-  id: string;
-  productType: string;
-  title: string;
-  priceRange: {
-    maxVariantPrice: {
-      amount: string;
-      currencyCode: string;
-    };
-    minVariantPrice: {
-      amount: string;
-      currencyCode: string;
-    };
-  };
-} | null;
+import { formatPrice, formatProductID } from "@/helpers/productHelpers";
+import { ShopifyProduct } from "@/types/ShopifyProducts";
 
-type edges = Product[];
 export type ProductListProps = {
-  products: Product[];
+  products: ShopifyProduct[];
 };
-
-function formatPrice(product: Product) {
-  if (
-    product?.priceRange?.maxVariantPrice?.amount ===
-    product?.priceRange?.minVariantPrice?.amount
-  ) {
-    return `${product?.priceRange?.maxVariantPrice?.amount} ${product?.priceRange?.maxVariantPrice?.currencyCode}`;
-  } else {
-    return `${product?.priceRange?.minVariantPrice?.amount} ${product?.priceRange?.minVariantPrice?.currencyCode} - ${product?.priceRange?.maxVariantPrice?.amount} ${product?.priceRange?.maxVariantPrice?.currencyCode}`;
-  }
-}
-function formatProductID(product: Product) {
-  return product?.id.split("gid://shopify/Product/")[1];
-}
 
 export const ProductList: React.FC<ProductListProps> = ({ products }) => {
   if (products) {

@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Disclosure, RadioGroup, Tab } from "@headlessui/react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { HeartIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { client } from "@/shopify-client";
+import { getProductByID } from "@/gql/getProducts";
+import { Router, useRouter } from "next/router";
 
 const product = {
   name: "Zip Tote Basket",
@@ -49,11 +52,33 @@ const product = {
   ],
 };
 
+export async function getServerSideProps() {
+  const router = useRouter();
+  let data = { collections: null, categories: null };
+  let response = await fetch(client.getStorefrontApiUrl(), {
+    body: JSON.stringify({
+      query: getProductByID,
+    }),
+    // Generate the headers using the private token.
+    headers: client.getPrivateTokenHeaders(),
+    method: "POST",
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  let json = await response.json();
+
+  return { props: json };
+}
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
+  const router = useRouter();
+  console.log(router.pathname);
   const [selectedColor, setSelectedColor] = useState(product.colors[0]);
 
   return (

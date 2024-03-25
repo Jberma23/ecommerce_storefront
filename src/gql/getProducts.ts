@@ -23,7 +23,7 @@
 //     }
 //   }
 // `;
-export const allProducts = `
+export const allProducts = `#graphql
 query allProducts($country: CountryCode) @inContext(country: $country) {
     products(first: 10) {
       edges {
@@ -68,8 +68,8 @@ query allProducts($country: CountryCode) @inContext(country: $country) {
   }
   `;
 
-export const getProductPriceRanges = `
-query getProductPriceRanges($country: CountryCode) @inContext(country: $country) {
+export const getProductPriceRanges = `#graphql
+  query getProductPriceRanges {
     products(first: 1) {
       edges {
         node {
@@ -84,7 +84,29 @@ query getProductPriceRanges($country: CountryCode) @inContext(country: $country)
               currencyCode
             }
           }
-          compareAtPriceRange {
+        }
+      }
+    }
+  }
+  `;
+
+export const allProductsByCollection = `#graphql
+query allProductsByCollection($handle: String){
+    products(query: $handle, first: 10) {
+      edges {
+        node {
+          title
+          id
+          handle
+          description
+          productType
+          featuredImage{
+            altText
+            height
+            width
+            url
+          }
+          priceRange {
             minVariantPrice {
               amount
               currencyCode  #active local currency
@@ -97,10 +119,5 @@ query getProductPriceRanges($country: CountryCode) @inContext(country: $country)
         }
       }
     }
-  }
-  
-  variables
-  {
-    "country": "CA"
   }
   `;

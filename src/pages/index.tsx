@@ -2,66 +2,25 @@ import { CategorySection } from "@/components/CategorySection/CategorySection";
 import { CollectionSection } from "@/components/CollectionSection/CollectionSection";
 import { FeaturedSection } from "@/components/FeaturedSection/FeaturedSection";
 import { FeaturedSectionTwo } from "@/components/FeaturedSectionTwo/FeaturedSectionTwo";
-import { getFirstFiveCategories, getFiveCategories } from "@/gql/getCategories";
-import { getFirstThreeCollections } from "@/gql/getCollections";
-import { client } from "@/shopify-client";
-import { useState } from "react";
-
+import { getFirstThreeCollections } from "@/helpers/collectionQueries";
+import { getProducts } from "@/helpers/productQueries";
+import {
+  serializeCollectionData,
+  serializeProductData,
+} from "@/types/GraphQLResponse";
 export async function getServerSideProps() {
-  let data = { collections: null, categories: null };
-  let response1 = await fetch(client.getStorefrontApiUrl(), {
-    body: JSON.stringify({
-      query: getFirstThreeCollections,
-    }),
-    // Generate the headers using the private token.
-    headers: client.getPrivateTokenHeaders(),
-    method: "POST",
-  });
-
-  if (!response1.ok) {
-    throw new Error(response1.statusText);
-  }
-
-  let json1 = await response1.json();
-  data.collections = json1;
-
-  let response2 = await fetch(client.getStorefrontApiUrl(), {
-    body: JSON.stringify({
-      query: getFiveCategories,
-    }),
-    // Generate the headers using the private token.
-    headers: client.getPrivateTokenHeaders(),
-    method: "POST",
-  });
-
-  if (!response2.ok) {
-    throw new Error(response2.statusText);
-  }
-
-  let json2 = await response2.json();
-  data.categories = json2;
-
-  return { props: data };
-}
-
-function formatCollectionData(data: any) {
-  console.log(data);
-  // console.log(data.collections.edges);
-  return data?.collections?.edges?.map((edge: { node: any }) => {
-    return edge.node;
-  });
-}
-function formatCategoriesData(data: any) {
-  // console.log(data.products.edg);
-  return data?.products?.edges?.map((edge: { node: any }) => {
-    return edge.node.metafield.value;
-  });
+  const products = await getProducts();
+  let serializedProducts = serializeProductData(products);
+  const collections = await getFirstThreeCollections();
+  let serializedCollections = serializeCollectionData(collections);
+  return {
+    props: {
+      products: serializedProducts,
+      collections: serializedCollections,
+    },
+  };
 }
 export default function HomePage(props: any) {
-  // console.log(props.categories.data.products.edges[0]);
-  let collections = formatCollectionData(props.collections.data);
-  let categories = formatCategoriesData(props.categories.data);
-  console.log(categories);
   return (
     <div className="bg-white">
       {/* Hero section */}
@@ -100,7 +59,7 @@ export default function HomePage(props: any) {
       <main>
         <CategorySection />
         <FeaturedSection />
-        <CollectionSection collections={null} />
+        <CollectionSection collections={props.collections} />
         <FeaturedSectionTwo />
       </main>
     </div>

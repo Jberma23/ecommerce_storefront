@@ -1,6 +1,9 @@
-import { Fragment, useState } from "react";
+import { ProductList } from "@/components/ProductList/ProductList";
+import { allProductsByCollection } from "@/helpers/productQueries";
+import { client } from "@/shopify-client";
+import { serializeProductData } from "@/types/GraphQLResponse";
+import { ShopifyProduct } from "@/types/ShopifyProducts";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import {
   ChevronDownIcon,
   FunnelIcon,
@@ -8,7 +11,10 @@ import {
   PlusIcon,
   Squares2X2Icon,
 } from "@heroicons/react/20/solid";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
+import { useParams } from "next/navigation";
+import { Fragment, useState } from "react";
 
 const sortOptions = [
   { name: "Most Popular", href: "#", current: true },
@@ -61,8 +67,25 @@ const filters = [
     ],
   },
 ];
+function makeTitle(slug: string) {
+  var words = slug.split("-");
 
-export default function Example() {
+  for (var i = 0; i < words.length; i++) {
+    var word = words[i];
+    words[i] = word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  return words.join(" ");
+}
+export async function getServerSideProps(context: {
+  params: { slug: string };
+}) {
+  const name = makeTitle(context.params?.slug);
+  let products = await allProductsByCollection(name);
+  let serializedProducts = serializeProductData(products);
+  return { props: { products: serializedProducts } };
+}
+export default function Example(props: { products: ShopifyProduct[] }) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   return (
@@ -342,7 +365,9 @@ export default function Example() {
               </form>
 
               {/* Product grid */}
-              <div className="lg:col-span-3">{/* Your content */}</div>
+              <div className="lg:col-span-3">
+                <ProductList products={props.products} />
+              </div>
             </div>
           </section>
         </main>

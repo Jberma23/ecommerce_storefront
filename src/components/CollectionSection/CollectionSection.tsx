@@ -44,13 +44,14 @@ const collections = [
       "Be more productive than enterprise project managers with a single piece of paper.",
   },
 ];
-function formatCollectionLink(collection: { id: string }) {
-  return `products/collection/${collection.id.split("gid://shopify/Collection/")[1]}`;
+function formatCollectionLink(collection: { id: string; handle: string }) {
+  return `collection/${collection.handle}`;
+  // .id.split("gid://shopify/Collection/")[1]
 }
 export const CollectionSection: React.FC<CollectionSectionProps> = ({
   collections,
 }: CollectionSectionProps) => {
-  // console.log(collections);
+  console.log(collections);
   return (
     <>
       {/* Collection section */}
