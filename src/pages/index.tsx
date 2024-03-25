@@ -2,12 +2,12 @@ import { CategorySection } from "@/components/CategorySection/CategorySection";
 import { CollectionSection } from "@/components/CollectionSection/CollectionSection";
 import { FeaturedSection } from "@/components/FeaturedSection/FeaturedSection";
 import { FeaturedSectionTwo } from "@/components/FeaturedSectionTwo/FeaturedSectionTwo";
-import { getFirstThreeCollections } from "@/helpers/collectionQueries";
-import { getProducts } from "@/helpers/productQueries";
+import { getFirstThreeCollections, getProducts } from "@/helpers/queries";
 import {
   serializeCollectionData,
   serializeProductData,
 } from "@/types/GraphQLResponse";
+
 export async function getServerSideProps() {
   const products = await getProducts();
   let serializedProducts = serializeProductData(products);

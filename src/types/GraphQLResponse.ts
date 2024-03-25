@@ -2,7 +2,7 @@ import type {
   ShopifyCollection,
   ShopifyExtension,
   ShopifyProduct,
-} from "./ShopifyProducts";
+} from "./ShopifyTypes";
 
 export type GraphQLProductResponse = {
   data: {
@@ -29,4 +29,7 @@ export function serializeCollectionData(response: GraphQLCollectionResponse) {
 }
 export function serializeProductData(response: GraphQLProductResponse) {
   return response.data.products.nodes;
+}
+export function serializeCollectionProductData(response: any) {
+  return response.data.collectionByHandle.products.nodes;
 }

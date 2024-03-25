@@ -1,8 +1,8 @@
 import { ProductList } from "@/components/ProductList/ProductList";
-import { allProductsByCollection } from "@/helpers/productQueries";
+import { allProductsByCollection } from "@/helpers/queries";
 import { client } from "@/shopify-client";
 import { serializeProductData } from "@/types/GraphQLResponse";
-import { ShopifyProduct } from "@/types/ShopifyProducts";
+import { ShopifyProduct } from "@/types/ShopifyTypes";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   ChevronDownIcon,

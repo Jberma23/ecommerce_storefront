@@ -1,8 +1,14 @@
 import { ProductList } from "@/components/ProductList/ProductList";
-import { allProductsByCollection } from "@/helpers/productQueries";
-import { client } from "@/shopify-client";
-import { serializeProductData } from "@/types/GraphQLResponse";
-import { ShopifyProduct } from "@/types/ShopifyProducts";
+import { makeTitle } from "@/helpers/productHelpers";
+import {
+  allProductsByCollection,
+  allProductsByCollectionV2,
+} from "@/helpers/queries";
+import {
+  serializeCollectionProductData,
+  serializeProductData,
+} from "@/types/GraphQLResponse";
+import { ShopifyProduct } from "@/types/ShopifyTypes";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   ChevronDownIcon,
@@ -13,7 +19,6 @@ import {
 } from "@heroicons/react/20/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { useParams } from "next/navigation";
 import { Fragment, useState } from "react";
 
 const sortOptions = [
@@ -67,25 +72,20 @@ const filters = [
     ],
   },
 ];
-function makeTitle(slug: string) {
-  var words = slug.split("-");
 
-  for (var i = 0; i < words.length; i++) {
-    var word = words[i];
-    words[i] = word.charAt(0).toUpperCase() + word.slice(1);
-  }
-
-  return words.join(" ");
-}
 export async function getServerSideProps(context: {
   params: { slug: string };
 }) {
-  const name = makeTitle(context.params?.slug);
-  let products = await allProductsByCollection(name);
-  let serializedProducts = serializeProductData(products);
-  return { props: { products: serializedProducts } };
+  let products = await allProductsByCollectionV2(context.params?.slug);
+  let serializedProducts = serializeCollectionProductData(products);
+  return {
+    props: { products: serializedProducts, slug: context.params.slug[0] },
+  };
 }
-export default function Example(props: { products: ShopifyProduct[] }) {
+export default function Example(props: {
+  products: ShopifyProduct[];
+  slug: string;
+}) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   return (
@@ -218,7 +218,7 @@ export default function Example(props: { products: ShopifyProduct[] }) {
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-              New Arrivals
+              {makeTitle(props.slug)}
             </h1>
 
             <div className="flex items-center">
@@ -284,7 +284,9 @@ export default function Example(props: { products: ShopifyProduct[] }) {
               </button>
             </div>
           </div>
-
+          <h6 className="text-sm font-bold  text-gray-900">
+            {props.products.length} products
+          </h6>
           <section aria-labelledby="products-heading" className="pb-24 pt-6">
             <h2 id="products-heading" className="sr-only">
               Products

@@ -1,4 +1,4 @@
-import { getFirstThreeCollections } from "@/gql/getCollections";
+import { formatCollectionLink } from "@/helpers/productHelpers";
 import { client } from "@/shopify-client";
 import {
   ReactElement,
@@ -44,14 +44,10 @@ const collections = [
       "Be more productive than enterprise project managers with a single piece of paper.",
   },
 ];
-function formatCollectionLink(collection: { id: string; handle: string }) {
-  return `collection/${collection.handle}`;
-  // .id.split("gid://shopify/Collection/")[1]
-}
+
 export const CollectionSection: React.FC<CollectionSectionProps> = ({
   collections,
 }: CollectionSectionProps) => {
-  console.log(collections);
   return (
     <>
       {/* Collection section */}
@@ -82,8 +78,8 @@ export const CollectionSection: React.FC<CollectionSectionProps> = ({
                 className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg lg:aspect-h-6 lg:aspect-w-5 group-hover:opacity-75"
               >
                 <img
-                  src={collection.image.url}
-                  alt={collection.image.altText}
+                  src={collection?.image?.url || ""}
+                  alt={collection?.image?.altText || ""}
                   className="h-full w-full object-cover object-center"
                 />
               </div>

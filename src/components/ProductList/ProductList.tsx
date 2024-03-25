@@ -1,5 +1,5 @@
 import { formatPrice, formatProductID } from "@/helpers/productHelpers";
-import { ShopifyProduct } from "@/types/ShopifyProducts";
+import { ShopifyProduct } from "@/types/ShopifyTypes";
 
 export type ProductListProps = {
   products: ShopifyProduct[];
