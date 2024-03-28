@@ -127,6 +127,8 @@ export const allProductsByCollectionV2 = async (slug: string): Promise<any> => {
                     currencyCode
                 }
                 }
+                tags
+                productType
             }
             }
         }
