@@ -44,8 +44,8 @@ export default function HomePage(props: any) {
           </h1>
           <p className="mt-4 text-xl text-white">
             The new arrivals have, well, newly arrived. Check out the latest
-            options from our summer small-batch release while they're still in
-            stock.
+            options from our summer small-batch release while they&lsquo;re
+            still in stock.
           </p>
           <a
             href="category/newArrivals"

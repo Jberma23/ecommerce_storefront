@@ -70,10 +70,10 @@ export type CollectionPageProps = {
   products: ShopifyProduct[];
   slug: string;
 };
-const collectionPage: React.FC<CollectionPageProps> = ({ products, slug }) => {
+const CollectionPage: React.FC<CollectionPageProps> = ({ products, slug }) => {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   return <ProductList products={products} />;
   // <ProductPage products={products} slug={slug} />;
 };
-export default collectionPage;
+export default CollectionPage;
