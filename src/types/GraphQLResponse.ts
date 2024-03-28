@@ -4,11 +4,17 @@ import type {
   ShopifyProduct,
 } from "./ShopifyTypes";
 
-export type GraphQLProductResponse = {
+export type GraphQLProductsResponse = {
   data: {
     products: {
       nodes: ShopifyProduct[];
     };
+  };
+  extensions: ShopifyExtension;
+};
+export type GraphQLProductResponse = {
+  data: {
+    product: ShopifyProduct;
   };
   extensions: ShopifyExtension;
 };
@@ -27,8 +33,11 @@ export function serializeCollectionData(response: GraphQLCollectionResponse) {
     return edge.node;
   });
 }
-export function serializeProductData(response: GraphQLProductResponse) {
+export function serializeProductData(response: GraphQLProductsResponse) {
   return response.data.products.nodes;
+}
+export function serializeSingleProductData(response: GraphQLProductResponse) {
+  return response.data.product;
 }
 export function serializeCollectionProductData(response: any) {
   return response.data.collectionByHandle.products.nodes;

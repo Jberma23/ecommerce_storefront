@@ -121,3 +121,37 @@ query allProductsByCollection($handle: String){
     }
   }
   `;
+
+export const GetProductById = `#graphql
+query GetProductsById($id: ID!) {
+  product(id: $id) {
+    title
+    id
+    handle
+    description
+    productType
+    featuredImage{
+      altText
+      height
+      width
+      url
+    }
+    images {
+      altText
+      height
+      width
+      url
+    }
+    priceRange {
+      minVariantPrice {
+        amount
+        currencyCode  #active local currency
+      }
+      maxVariantPrice {
+        amount
+        currencyCode
+      }
+    }
+  }
+}
+  `;

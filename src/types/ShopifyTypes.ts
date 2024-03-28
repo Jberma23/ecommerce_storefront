@@ -1,12 +1,6 @@
 export type ShopifyProduct = {
   description: string;
-  featuredImage: {
-    altText: string;
-    height: number;
-    id: string;
-    url: string;
-    width: number;
-  };
+  featuredImage: ShopifyImage;
   handle: string;
   id: string;
   priceRange: {
@@ -19,6 +13,7 @@ export type ShopifyProduct = {
       currencyCode: string;
     };
   };
+  images: ShopifyImage[];
   tags: string[];
   title: string;
 };
@@ -35,15 +30,15 @@ export type ShopifyCollection = {
   collection_type: string;
   published_scope: string;
   admin_graphql_api_id: string;
-  image: {
-    created_at: string;
-    alt: string;
-    width: string;
-    height: string;
-    src: string;
-  };
+  image: ShopifyImage;
 };
-
+export type ShopifyImage = {
+  altText: string;
+  height: number;
+  id: string;
+  url: string;
+  width: number;
+};
 export type ShopifyExtension = {
   cost: {
     actualQueryCost: number;

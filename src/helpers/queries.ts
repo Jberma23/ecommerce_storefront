@@ -1,6 +1,7 @@
 import { client } from "@/shopify-client";
 import {
   GraphQLCollectionResponse,
+  GraphQLProductsResponse,
   GraphQLProductResponse,
 } from "../types/GraphQLResponse";
 import runQuery from "./baseQuery";
@@ -28,7 +29,7 @@ export const getFirstThreeCollections =
     return res;
   };
 
-export const getProducts = async (): Promise<GraphQLProductResponse> => {
+export const getProducts = async (): Promise<GraphQLProductsResponse> => {
   let res = await runQuery(`#graphql
     query ProductsQuery {
       products(first: 10) {
@@ -63,7 +64,7 @@ export const getProducts = async (): Promise<GraphQLProductResponse> => {
 
 export const allProductsByCollection = async (
   slug: string
-): Promise<GraphQLProductResponse> => {
+): Promise<GraphQLProductsResponse> => {
   let res = await runQuery(
     `#graphql
 query allProductsByCollection($handle: String!) {
@@ -137,7 +138,37 @@ export const allProductsByCollectionV2 = async (slug: string): Promise<any> => {
   );
   return res;
 };
-export const getsomething = async (): Promise<GraphQLProductResponse> => {
-  let res = await runQuery(`#graphql`);
+export const GetProductById = async (
+  productID: string
+): Promise<GraphQLProductResponse> => {
+  let res = await runQuery(
+    `#graphql
+  query GetProductsById($id: ID!) {
+  product(id: $id) {
+    title
+    id
+    handle
+    description
+    productType
+    featuredImage{
+      altText
+      height
+      width
+      url
+    }
+    priceRange {
+      minVariantPrice {
+        amount
+        currencyCode  #active local currency
+      }
+      maxVariantPrice {
+        amount
+        currencyCode
+      }
+    }
+  }
+}`,
+    { id: `gid://shopify/Product/${productID}` }
+  );
   return res;
 };
