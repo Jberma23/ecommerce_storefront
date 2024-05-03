@@ -36,9 +36,21 @@ export function serializeCollectionData(response: GraphQLCollectionResponse) {
 export function serializeProductData(response: GraphQLProductsResponse) {
   return response.data.products.nodes;
 }
+export function serializeProductMedia(response: GraphQLProductsResponse) {
+  return response.data.products.nodes;
+}
 export function serializeSingleProductData(response: GraphQLProductResponse) {
-  return response.data.product;
+  if (response == null) {
+    console.error(response);
+  } else {
+    return response.data.product;
+  }
 }
 export function serializeCollectionProductData(response: any) {
   return response.data.collectionByHandle.products.nodes;
+}
+export function serializeCategoryData(response: GraphQLCollectionResponse) {
+  return response.data.collections.edges.map((edge: { node: any }) => {
+    return edge.node;
+  });
 }

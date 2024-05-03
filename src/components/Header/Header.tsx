@@ -1,5 +1,5 @@
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
@@ -9,8 +9,14 @@ import {
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { CurrencyContext } from "@/pages/_app";
+import { FlyoutMenu } from "../FlyoutMenu/FlyoutMenu";
+import { MobileLinks } from "../MobileLinks/MobileLinks";
 
-export type HeaderProps = {};
+export type HeaderProps = {
+  HandleCurrencyChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  defaultCurrency: string;
+};
 const currencies = ["CAD", "USD", "AUD", "EUR", "GBP"];
 const navigation = {
   categories: [
@@ -19,15 +25,15 @@ const navigation = {
       featured: [
         {
           name: "New Arrivals",
-          href: "#",
+          href: "/collection/womens-new-arrivals",
           imageSrc:
             "https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg",
           imageAlt:
             "Models sitting back to back, wearing Basic Tee in black and bone.",
         },
         {
-          name: "Basic Tees",
-          href: "#",
+          name: "Clothes",
+          href: "/collection/womens-clothes",
           imageSrc:
             "https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg",
           imageAlt:
@@ -35,19 +41,18 @@ const navigation = {
         },
         {
           name: "Accessories",
-          href: "#",
+          href: "/collection/womens-accessories",
           imageSrc:
             "https://tailwindui.com/img/ecommerce-images/mega-menu-category-03.jpg",
           imageAlt:
             "Model wearing minimalist watch with black wristband and white watch face.",
         },
         {
-          name: "Carry",
-          href: "#",
+          name: "Shoes",
+          href: "/collection/womens-shoes",
           imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/mega-menu-category-04.jpg",
-          imageAlt:
-            "Model opening tan leather long wallet with credit card pockets and cash pouch.",
+            "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=3687&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          imageAlt: "Image of shoes",
         },
       ],
     },
@@ -56,7 +61,7 @@ const navigation = {
       featured: [
         {
           name: "New Arrivals",
-          href: "#",
+          href: "/collection/mens-new-arrivals",
           imageSrc:
             "https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-01.jpg",
           imageAlt:
@@ -64,34 +69,67 @@ const navigation = {
         },
         {
           name: "Basic Tees",
-          href: "#",
+          href: "/collection/mens-basic-tees",
           imageSrc:
             "https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-02.jpg",
           imageAlt: "Model wearing light heather gray t-shirt.",
         },
         {
           name: "Accessories",
-          href: "#",
+          href: "/collection/mens-accessories",
           imageSrc:
             "https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-03.jpg",
           imageAlt:
             "Grey 6-panel baseball hat with black brim, black mountain graphic on front, and light heather gray body.",
         },
         {
-          name: "Carry",
-          href: "#",
+          name: "Shoes",
+          href: "/collection/mens-shoes",
           imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-04.jpg",
+            "https://plus.unsplash.com/premium_photo-1665664652418-91f260a84842?q=80&w=3276&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          imageAlt:
+            "Model putting folded cash into slim card holder olive leather wallet with hand stitching.",
+        },
+      ],
+    },
+    {
+      name: "Kids",
+      featured: [
+        {
+          name: "New Arrivals",
+          href: "/collection/kids-new-arrivals",
+          imageSrc:
+            "https://plus.unsplash.com/premium_photo-1675183689638-a68fe7048da9?q=80&w=3570&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          imageAlt:
+            "Hats and sweaters on wood shelves next to various colors of t-shirts on hangers.",
+        },
+        {
+          name: "Clothing",
+          href: "/collection/kids-clothing",
+          imageSrc:
+            "https://images.unsplash.com/photo-1604467794349-0b74285de7e7?q=80&w=3570&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          imageAlt: "Model wearing light heather gray t-shirt.",
+        },
+        {
+          name: "Accessories",
+          href: "/collection/kids-accessories",
+          imageSrc:
+            "https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-03.jpg",
+          imageAlt:
+            "Grey 6-panel baseball hat with black brim, black mountain graphic on front, and light heather gray body.",
+        },
+        {
+          name: "Shoes",
+          href: "/collection/kids-shoes",
+          imageSrc:
+            "https://images.unsplash.com/photo-1503449377594-32dd9ac4467c?q=80&w=3571&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           imageAlt:
             "Model putting folded cash into slim card holder olive leather wallet with hand stitching.",
         },
       ],
     },
   ],
-  pages: [
-    { name: "Company", href: "#" },
-    { name: "Stores", href: "#" },
-  ],
+  pages: [],
 };
 const cart = [
   {
@@ -117,7 +155,11 @@ const cart = [
   // More products...
 ];
 
-export const Header: React.FC<HeaderProps> = () => {
+export const Header: React.FC<HeaderProps> = ({
+  HandleCurrencyChange,
+  defaultCurrency,
+}) => {
+  const currency = useContext(CurrencyContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   return (
     <>
@@ -163,68 +205,10 @@ export const Header: React.FC<HeaderProps> = () => {
                 </div>
 
                 {/* Links */}
-                <Tab.Group as="div" className="mt-2">
-                  <div className="border-b border-gray-200">
-                    <Tab.List className="-mb-px flex space-x-8 px-4">
-                      {navigation.categories.map((category) => (
-                        <Tab
-                          key={category.name}
-                          className={({ selected }) =>
-                            clsx(
-                              selected
-                                ? "border-indigo-600 text-indigo-600"
-                                : "border-transparent text-gray-900",
-                              "flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium"
-                            )
-                          }
-                        >
-                          {category.name}
-                        </Tab>
-                      ))}
-                    </Tab.List>
-                  </div>
-                  <Tab.Panels as={Fragment}>
-                    {navigation.categories.map((category) => (
-                      <Tab.Panel
-                        key={category.name}
-                        className="space-y-12 px-4 py-6"
-                      >
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-10">
-                          {category.featured.map((item) => (
-                            <div key={item.name} className="group relative">
-                              <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-md bg-gray-100 group-hover:opacity-75">
-                                <img
-                                  src={item.imageSrc}
-                                  alt={item.imageAlt}
-                                  className="object-cover object-center"
-                                />
-                              </div>
-                              <a
-                                href={item.href}
-                                className="mt-6 block text-sm font-medium text-gray-900"
-                              >
-                                <span
-                                  className="absolute inset-0 z-10"
-                                  aria-hidden="true"
-                                />
-                                {item.name}
-                              </a>
-                              <p
-                                aria-hidden="true"
-                                className="mt-1 text-sm text-gray-500"
-                              >
-                                Shop now
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      </Tab.Panel>
-                    ))}
-                  </Tab.Panels>
-                </Tab.Group>
+                <MobileLinks categories={navigation.categories} />
 
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-                  {navigation.pages.map((page) => (
+                  {/* {navigation.pages?.map((page) => (
                     <div key={page.name} className="flow-root">
                       <a
                         href={page.href}
@@ -233,7 +217,7 @@ export const Header: React.FC<HeaderProps> = () => {
                         {page.name}
                       </a>
                     </div>
-                  ))}
+                  ))} */}
                 </div>
 
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
@@ -267,6 +251,8 @@ export const Header: React.FC<HeaderProps> = () => {
                           id="mobile-currency"
                           name="currency"
                           className="flex items-center rounded-md border-transparent bg-none py-0.5 pl-2 pr-5 text-sm font-medium text-gray-700 focus:border-transparent focus:outline-none focus:ring-0 group-hover:text-gray-800"
+                          value={defaultCurrency}
+                          onChange={(event) => HandleCurrencyChange(event)}
                         >
                           {currencies.map((currency) => (
                             <option key={currency}>{currency}</option>
@@ -307,12 +293,19 @@ export const Header: React.FC<HeaderProps> = () => {
                         id="desktop-currency"
                         name="currency"
                         className="flex items-center rounded-md border-transparent bg-gray-900 bg-none py-0.5 pl-2 pr-5 text-sm font-medium text-white focus:border-transparent focus:outline-none focus:ring-0 group-hover:text-gray-100"
+                        value={defaultCurrency}
+                        onChange={(event) => HandleCurrencyChange(event)}
                       >
                         {currencies.map((currency) => (
                           <option key={currency}>{currency}</option>
                         ))}
                       </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center"></div>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center">
+                        <ChevronDownIcon
+                          className="h-5 w-5 text-gray-300"
+                          aria-hidden="true"
+                        />
+                      </div>
                     </div>
                   </div>
                 </form>
@@ -343,105 +336,16 @@ export const Header: React.FC<HeaderProps> = () => {
                     <div className="hidden lg:flex lg:flex-1 lg:items-center">
                       <a href="#">
                         <span className="sr-only">Your Company</span>
-                        <img
-                          className="h-8 w-auto"
-                          src="https://tailwindui.com/img/logos/mark.svg?color=white"
-                          alt=""
-                        />
+                        <img className="h-10 w-auto" src="/Logo.svg" alt="" />
                       </a>
                     </div>
 
                     <div className="hidden h-full lg:flex">
                       {/* Flyout menus */}
-                      <Popover.Group className="inset-x-0 bottom-0 px-4">
-                        <div className="flex h-full justify-center space-x-8">
-                          {navigation.categories.map((category) => (
-                            <Popover key={category.name} className="flex">
-                              {({ open }) => (
-                                <>
-                                  <div className="relative flex">
-                                    <Popover.Button className="relative z-10 flex items-center justify-center text-sm font-medium text-white transition-colors duration-200 ease-out">
-                                      {category.name}
-                                      <span
-                                        className={clsx(
-                                          open ? "bg-white" : "",
-                                          "absolute inset-x-0 -bottom-px h-0.5 transition duration-200 ease-out"
-                                        )}
-                                        aria-hidden="true"
-                                      />
-                                    </Popover.Button>
-                                  </div>
-
-                                  <Transition
-                                    as={Fragment}
-                                    enter="transition ease-out duration-200"
-                                    enterFrom="opacity-0"
-                                    enterTo="opacity-100"
-                                    leave="transition ease-in duration-150"
-                                    leaveFrom="opacity-100"
-                                    leaveTo="opacity-0"
-                                  >
-                                    <Popover.Panel className="absolute inset-x-0 top-full text-sm text-gray-500">
-                                      {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
-                                      <div
-                                        className="absolute inset-0 top-1/2 bg-white shadow"
-                                        aria-hidden="true"
-                                      />
-
-                                      <div className="relative bg-white">
-                                        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                                          <div className="grid grid-cols-4 gap-x-8 gap-y-10 py-16">
-                                            {category.featured.map((item) => (
-                                              <div
-                                                key={item.name}
-                                                className="group relative"
-                                              >
-                                                <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-md bg-gray-100 group-hover:opacity-75">
-                                                  <img
-                                                    src={item.imageSrc}
-                                                    alt={item.imageAlt}
-                                                    className="object-cover object-center"
-                                                  />
-                                                </div>
-                                                <a
-                                                  href={item.href}
-                                                  className="mt-4 block font-medium text-gray-900"
-                                                >
-                                                  <span
-                                                    className="absolute inset-0 z-10"
-                                                    aria-hidden="true"
-                                                  />
-                                                  {item.name}
-                                                </a>
-                                                <p
-                                                  aria-hidden="true"
-                                                  className="mt-1"
-                                                >
-                                                  Shop now
-                                                </p>
-                                              </div>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </Popover.Panel>
-                                  </Transition>
-                                </>
-                              )}
-                            </Popover>
-                          ))}
-
-                          {navigation.pages.map((page) => (
-                            <a
-                              key={page.name}
-                              href={page.href}
-                              className="flex items-center text-sm font-medium text-white"
-                            >
-                              {page.name}
-                            </a>
-                          ))}
-                        </div>
-                      </Popover.Group>
+                      <FlyoutMenu
+                        categories={navigation.categories}
+                        pages={navigation.pages}
+                      />
                     </div>
 
                     {/* Mobile menu and search (lg-) */}
@@ -476,29 +380,7 @@ export const Header: React.FC<HeaderProps> = () => {
                     </a>
 
                     <div className="flex flex-1 items-center justify-end">
-                      <a
-                        href="#"
-                        className="hidden text-sm font-medium text-white lg:block"
-                      >
-                        Search
-                      </a>
-
                       <div className="flex items-center lg:ml-8">
-                        {/* Help */}
-                        <a href="#" className="p-2 text-white lg:hidden">
-                          <span className="sr-only">Help</span>
-                          <QuestionMarkCircleIcon
-                            className="h-6 w-6"
-                            aria-hidden="true"
-                          />
-                        </a>
-                        <a
-                          href="#"
-                          className="hidden text-sm font-medium text-white lg:block"
-                        >
-                          Help
-                        </a>
-
                         <Popover className="ml-4 flow-root text-sm lg:relative lg:ml-8">
                           <Popover.Button className="group -m-2 flex items-center p-2">
                             <ShoppingBagIcon

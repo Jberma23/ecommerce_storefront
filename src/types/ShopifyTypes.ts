@@ -13,7 +13,11 @@ export type ShopifyProduct = {
       currencyCode: string;
     };
   };
-  images: ShopifyImage[];
+  media: {
+    edges: {
+      node: ShopifyMediaNode;
+    }[];
+  };
   tags: string[];
   title: string;
 };
@@ -49,4 +53,27 @@ export type ShopifyExtension = {
       restoreRate: number;
     };
   };
+};
+export type ShopifyMedia = {
+  edges: {
+    node: ShopifyMediaNode;
+  }[];
+};
+export type ShopifyMediaNode = {
+  alt: string;
+  mediaContentType: string;
+  previewImage: {
+    id: string;
+    altText: string;
+    url: string;
+  };
+};
+export type ShopifyVariant = {
+  availableForSale: boolean;
+  id: string;
+  priceV2: {
+    amount: string;
+    currencyCode: string;
+  };
+  title: string;
 };

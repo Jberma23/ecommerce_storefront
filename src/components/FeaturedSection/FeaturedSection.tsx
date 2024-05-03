@@ -22,8 +22,7 @@ export const FeaturedSection: React.FC<FeaturedSectionProps> = ({}) => {
                 id="social-impact-heading"
                 className="text-3xl font-bold tracking-tight text-white sm:text-4xl"
               >
-                <span className="block sm:inline">Level up</span>
-                <span className="block sm:inline">your desk</span>
+                <span className="block sm:inline">Level up your desk</span>
               </h2>
               <p className="mt-3 text-xl text-white">
                 Make your desk beautiful and organized. Post a picture to social

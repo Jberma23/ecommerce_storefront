@@ -1,4 +1,3 @@
-import { client } from "@/shopify-client";
 import {
   GraphQLCollectionResponse,
   GraphQLProductsResponse,
@@ -10,7 +9,7 @@ export const getFirstThreeCollections =
   async (): Promise<GraphQLCollectionResponse> => {
     let res = await runQuery(`#graphql
     query {
-      collections(first: 5, reverse: true) {
+      collections(first: 6, reverse: true) {
           edges {
               node {
               id
@@ -138,9 +137,7 @@ export const allProductsByCollectionV2 = async (slug: string): Promise<any> => {
   );
   return res;
 };
-export const GetProductById = async (
-  productID: string
-): Promise<GraphQLProductResponse> => {
+export const GetProductById = async (productID: string): Promise<any> => {
   let res = await runQuery(
     `#graphql
   query GetProductsById($id: ID!) {
@@ -156,6 +153,19 @@ export const GetProductById = async (
       width
       url
     }
+    media(first: 5) {
+      edges {
+        node {
+          alt
+          mediaContentType
+          previewImage {
+              id
+              altText
+              url
+          }
+        }
+      }
+    }
     priceRange {
       minVariantPrice {
         amount
@@ -170,5 +180,20 @@ export const GetProductById = async (
 }`,
     { id: `gid://shopify/Product/${productID}` }
   );
-  return res;
+  if (res.errors) {
+    throw new Error(res.errors[0].message);
+  } else {
+    return res;
+  }
 };
+export const getProductCategories =
+  async (): Promise<GraphQLCollectionResponse> => {
+    let res = await runQuery(`#graphql
+    query GetProductsById($handle: MetaobjectHandleInput!) {
+      metaobjectByHandle(handle: $handle){
+        handle
+      }
+    }
+  `);
+    return res;
+  };

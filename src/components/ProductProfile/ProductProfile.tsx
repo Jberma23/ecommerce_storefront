@@ -1,4 +1,8 @@
-import { ShopifyImage, ShopifyProduct } from "@/types/ShopifyTypes";
+import {
+  ShopifyImage,
+  ShopifyProduct,
+  ShopifyMediaNode,
+} from "@/types/ShopifyTypes";
 import { Disclosure, RadioGroup, Tab } from "@headlessui/react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { HeartIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
@@ -22,45 +26,53 @@ export const ProductProfile: React.FC<ProductProfileProps> = ({ product }) => {
               {/* Image selector */}
               <div className="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
                 <Tab.List className="grid grid-cols-4 gap-6">
-                  {product.images.map((image: ShopifyImage) => (
-                    <Tab
-                      key={image.id}
-                      className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
-                    >
-                      {({ selected }) => (
-                        <>
-                          <span className="sr-only">{image.altText}</span>
-                          <span className="absolute inset-0 overflow-hidden rounded-md">
-                            <img
-                              src={image.url}
-                              alt=""
-                              className="h-full w-full object-cover object-center"
+                  {product.media.edges?.map(
+                    (value: { node: ShopifyMediaNode }) => (
+                      <Tab
+                        key={value.node.previewImage.id}
+                        className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
+                      >
+                        {({ selected }) => (
+                          <>
+                            <span className="sr-only">
+                              {value.node.previewImage.altText}
+                            </span>
+                            <span className="absolute inset-0 overflow-hidden rounded-md">
+                              <img
+                                src={value.node.previewImage.url}
+                                alt={value.node.previewImage.altText}
+                                className="h-full w-full object-cover object-center"
+                              />
+                            </span>
+                            <span
+                              className={clsx(
+                                selected
+                                  ? "ring-indigo-500"
+                                  : "ring-transparent",
+                                "pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2"
+                              )}
+                              aria-hidden="true"
                             />
-                          </span>
-                          <span
-                            className={clsx(
-                              selected ? "ring-indigo-500" : "ring-transparent",
-                              "pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2"
-                            )}
-                            aria-hidden="true"
-                          />
-                        </>
-                      )}
-                    </Tab>
-                  ))}
+                          </>
+                        )}
+                      </Tab>
+                    )
+                  )}
                 </Tab.List>
               </div>
 
               <Tab.Panels className="aspect-h-1 aspect-w-1 w-full">
-                {product.images.map((image) => (
-                  <Tab.Panel key={image.id}>
-                    <img
-                      src={image.url}
-                      alt={image.altText}
-                      className="h-full w-full object-cover object-center sm:rounded-lg"
-                    />
-                  </Tab.Panel>
-                ))}
+                {product.media.edges?.map(
+                  (value: { node: ShopifyMediaNode }) => (
+                    <Tab.Panel key={value.node.previewImage.id}>
+                      <img
+                        src={value.node.previewImage.url}
+                        alt={value.node.previewImage.altText}
+                        className="h-full w-full object-cover object-center sm:rounded-lg"
+                      />
+                    </Tab.Panel>
+                  )
+                )}
               </Tab.Panels>
             </Tab.Group>
 

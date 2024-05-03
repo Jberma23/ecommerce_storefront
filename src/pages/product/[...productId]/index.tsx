@@ -1,14 +1,9 @@
-import { client } from "@/shopify-client";
-import { Disclosure, RadioGroup, Tab } from "@headlessui/react";
-import { StarIcon } from "@heroicons/react/20/solid";
-import { HeartIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { GetProductById } from "../../../../helpers/queries";
-import clsx from "clsx";
 import { ProductProfile } from "@/components/ProductProfile/ProductProfile";
 import { serializeSingleProductData } from "@/types/GraphQLResponse";
 import { ShopifyProduct } from "@/types/ShopifyTypes";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { GetProductById } from "../../../helpers/queries";
 
 const product = {
   name: "Zip Tote Basket",
@@ -67,9 +62,5 @@ export async function getServerSideProps(context: {
 }
 
 export default function Example(props: { product: ShopifyProduct }) {
-  const router = useRouter();
-  console.log(router.pathname);
-  const [selectedColor, setSelectedColor] = useState(product.colors[0]);
-
   return <ProductProfile product={props.product} />;
 }
