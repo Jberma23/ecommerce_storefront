@@ -334,7 +334,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <div className="flex h-16 items-center justify-between">
                     {/* Logo (lg+) */}
                     <div className="hidden lg:flex lg:flex-1 lg:items-center">
-                      <a href="#">
+                      <a href="/">
                         <span className="sr-only">Your Company</span>
                         <img className="h-10 w-auto" src="/Logo.svg" alt="" />
                       </a>
@@ -370,7 +370,7 @@ export const Header: React.FC<HeaderProps> = ({
                     </div>
 
                     {/* Logo (lg-) */}
-                    <a href="#" className="lg:hidden">
+                    <a href="/" className="lg:hidden">
                       <span className="sr-only">Your Company</span>
                       <img
                         src="https://tailwindui.com/img/logos/mark.svg?color=white"

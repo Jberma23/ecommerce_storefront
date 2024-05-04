@@ -48,7 +48,6 @@ const collections = [
 export const CollectionSection: React.FC<CollectionSectionProps> = ({
   collections,
 }: CollectionSectionProps) => {
-  console.log(collections);
   return (
     <>
       {/* Collection section */}
