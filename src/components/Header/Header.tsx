@@ -12,6 +12,7 @@ import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { CurrencyContext } from "@/pages/_app";
 import { FlyoutMenu } from "../FlyoutMenu/FlyoutMenu";
 import { MobileLinks } from "../MobileLinks/MobileLinks";
+import Link from "next/link";
 
 export type HeaderProps = {
   HandleCurrencyChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -334,10 +335,10 @@ export const Header: React.FC<HeaderProps> = ({
                   <div className="flex h-16 items-center justify-between">
                     {/* Logo (lg+) */}
                     <div className="hidden lg:flex lg:flex-1 lg:items-center">
-                      <a href="/">
+                      <Link href="/">
                         <span className="sr-only">Your Company</span>
                         <img className="h-10 w-auto" src="/Logo.svg" alt="" />
-                      </a>
+                      </Link>
                     </div>
 
                     <div className="hidden h-full lg:flex">
@@ -370,14 +371,14 @@ export const Header: React.FC<HeaderProps> = ({
                     </div>
 
                     {/* Logo (lg-) */}
-                    <a href="/" className="lg:hidden">
+                    <Link href="/" className="lg:hidden">
                       <span className="sr-only">Your Company</span>
                       <img
                         src="https://tailwindui.com/img/logos/mark.svg?color=white"
                         alt=""
                         className="h-8 w-auto"
                       />
-                    </a>
+                    </Link>
 
                     <div className="flex flex-1 items-center justify-end">
                       <div className="flex items-center lg:ml-8">
