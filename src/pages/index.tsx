@@ -3,7 +3,7 @@ import { CollectionSection } from "@/components/CollectionSection/CollectionSect
 import { FeaturedSection } from "@/components/FeaturedSection/FeaturedSection";
 import { FeaturedSectionTwo } from "@/components/FeaturedSectionTwo/FeaturedSectionTwo";
 import {
-  getFirstThreeCollections,
+  getFirstSixCollections,
   getProductCategories,
   getProducts,
 } from "@/helpers/queries";
@@ -16,7 +16,7 @@ import {
 export async function getServerSideProps() {
   const products = await getProducts();
   let serializedProducts = serializeProductData(products);
-  const collections = await getFirstThreeCollections();
+  const collections = await getFirstSixCollections();
   let serializedCollections = serializeCollectionData(collections);
   // const categoies = await getProductCategories();
   // let serializedCatergory = serializeCategoryData(categoies);

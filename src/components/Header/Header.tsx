@@ -219,7 +219,7 @@ export const Header: React.FC<HeaderProps> = ({
                     </div>
                   ))} */}
                 </div>
-
+                {/* 
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                   <div className="flow-root">
                     <a
@@ -237,7 +237,7 @@ export const Header: React.FC<HeaderProps> = ({
                       Sign in
                     </a>
                   </div>
-                </div>
+                </div> */}
 
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                   {/* Currency selector */}
@@ -310,7 +310,7 @@ export const Header: React.FC<HeaderProps> = ({
                   </div>
                 </form>
 
-                <div className="flex items-center space-x-6">
+                {/* <div className="flex items-center space-x-6">
                   <a
                     href="#"
                     className="text-sm font-medium text-white hover:text-gray-100"
@@ -323,7 +323,7 @@ export const Header: React.FC<HeaderProps> = ({
                   >
                     Create an account
                   </a>
-                </div>
+                </div> */}
               </div>
             </div>
 

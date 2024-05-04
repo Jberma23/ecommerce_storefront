@@ -5,7 +5,7 @@ import {
 } from "../types/GraphQLResponse";
 import runQuery from "./baseQuery";
 
-export const getFirstThreeCollections =
+export const getFirstSixCollections =
   async (): Promise<GraphQLCollectionResponse> => {
     let res = await runQuery(`#graphql
     query {
